@@ -14,6 +14,7 @@ module.exports = {
     rules: {
         indent: ['error', 4],
         semi: 2,
+        'no-console': 'error',
         'arrow-parens': 'off',
         'comma-dangle': 'off',
         'linebreak-style': 'off'
@@ -29,6 +30,12 @@ module.exports = {
                 expect: true,
                 TestUtils: true,
                 createSandbox: true
+            }
+        },
+        {
+            files: ['src/utils/LogUtils.js'],
+            rules: {
+                'no-console': 'off'
             }
         }
     ],

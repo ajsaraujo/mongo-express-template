@@ -4,11 +4,7 @@ class LogController {
     }
 
     async create(content) {
-        try {
-            await this.Log.create({ content });
-        } catch ({ message }) {
-            console.log(message);
-        }
+        await this.Log.create({ content });
     }
 
     async get(req, res) {
