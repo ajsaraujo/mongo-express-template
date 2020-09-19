@@ -29,7 +29,8 @@ const UserSchema = new Schema(
 );
 
 // Deve-se usar function() e não arrow function por causa do this.
-UserSchema.pre('save', async function(next) {
+// eslint-disable-next-line func-names
+UserSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await PasswordUtils.encrypt(this.password);
     }

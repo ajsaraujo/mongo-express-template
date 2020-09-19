@@ -1,17 +1,18 @@
 import { config } from 'dotenv';
 import createApp from './app';
+import LogUtils from './utils/LogUtils';
 
 function addExitSignals(app, server, exitSignals) {
     exitSignals.forEach(signal => {
         process.on(signal, () => {
             server.close(err => {
                 if (err) {
-                    console.error(err);
+                    LogUtils.log(err);
                     process.exit(1);
                 }
 
                 app.database.close(() => {
-                    console.info('Conexão com o banco de dados foi fechada.');
+                    LogUtils.log('Conexão com o banco de dados foi fechada.');
                     process.exit(0);
                 });
             });
@@ -28,12 +29,12 @@ function addExitSignals(app, server, exitSignals) {
         await app.database.connect();
 
         const server = app.listen(process.env.APP_PORT, () => {
-            console.log(`O app está escutando na porta ${process.env.APP_PORT}!`);
+            LogUtils.log(`O app está escutando na porta ${process.env.APP_PORT}!`);
         });
 
         addExitSignals(app, server, ['SIGINT', 'SIGTERM', 'SIGQUIT']);
     } catch (error) {
-        console.error(error);
+        LogUtils.log(error);
         process.exit(1);
     }
 })();
