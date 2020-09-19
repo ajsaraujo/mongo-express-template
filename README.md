@@ -1,6 +1,6 @@
 # Template Express MongoDB
 
-Este é o template da SofTeam para aplicações Express com MongoDB, servindo como diretriz para os projetos da empresa. 
+Este é o template da SofTeam para aplicações Express com MongoDB, servindo como diretriz para os projetos da empresa. Para ver o template com banco de dados relacional, clique [aqui](https://github.com/SofTeamEJC/rdb-express-template).
 
   1. [Pré-Requisitos](#pré-requisitos)
   2. [Configuração](#configuração)
@@ -150,6 +150,7 @@ Criamos um _router_ que irá servir o endpoint `/product`. Instanciamos um novo 
 - [express](https://www.npmjs.com/package/express)
 - [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
 - [helmet](https://www.npmjs.com/package/helmet)
+- [joi](https://www.npmjs.com/package/joi)
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [mongoose](https://www.npmjs.com/package/mongoose)
 - [morgan](https://www.npmjs.com/package/morgan)
