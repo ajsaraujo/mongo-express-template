@@ -153,20 +153,21 @@ describe('UserController', () => {
         });
     });
 
-    describe.skip('getById()', async () => {
+    describe('getById()', async () => {
+        let findStub;
+
         beforeEach(() => {
-            findStub = sandbox.stub();
+            findStub = sandbox.stub(User, 'findById');
             req.params.id = '123456789000';
         });
 
         it('should return 404 if user is not found', async () => {
-            User.findById.resolves(null);
+            findStub.resolves(null);
 
             const { status, json } = await UserController.getById(req, res);
 
             expect(status).to.equal(404);
-            expect(json).to.deep.equal({ message: `Não há usuário com o id ${req.params.id}.` });
-        });
+            expect(json).to.deep.equal({ message: `Não há usuário com o id ${req.params.id}.` });  });
 
         it('should return 200 and user', async () => {
             const user = {
@@ -175,7 +176,7 @@ describe('UserController', () => {
                 password: 'graaaaawrlllllnhaaauw'
             };
 
-            User.findById.resolves(user);
+            findStub.resolves(user);
 
             const { status, json } = await UserController.getById(req, res);
 
@@ -184,7 +185,7 @@ describe('UserController', () => {
         });
 
         it('should return 500 if an error is thrown', async () => {
-            User.findById.rejects({ message: 'Usuário não encontrado' });
+            findStub.rejects({ message: 'Usuário não encontrado' });
 
             const { status, json } = await UserController.getById(req, res);
 
@@ -193,14 +194,16 @@ describe('UserController', () => {
         });
     });
 
-    describe.skip('remove()', () => {
+    describe('remove()', () => {
+        let removeStub;
+
         beforeEach(() => {
             req.userId = '123456789000';
-            User.findByIdAndRemove = sandbox.stub();
+            removeStub = sandbox.stub(User, 'findByIdAndRemove');
         });
 
         it('should return 404 if user was not found', async () => {
-            User.findByIdAndRemove.resolves(null);
+            removeStub.resolves(null);
 
             const { status, json } = await UserController.remove(req, res);
 
@@ -215,17 +218,17 @@ describe('UserController', () => {
                 password: 'senhaencriptada'
             };
 
-            User.findByIdAndRemove.resolves(user);
+            removeStub.resolves(user);
 
             const { status, json } = await UserController.remove(req, res);
 
-            expect(User.findByIdAndRemove.calledWith(req.userId)).to.be.true;
+            expect(removeStub.calledWith(req.userId)).to.be.true;
             expect(status).to.equal(200);
             expect(json).to.deep.equal(user);
         });
 
         it('should return 500 if an error is thrown', async () => {
-            User.findByIdAndRemove.rejects({ message: 'Não deu pra deletar =/' });
+            removeStub.rejects({ message: 'Não deu pra deletar =/' });
 
             const { status, json } = await UserController.remove(req, res);
 
