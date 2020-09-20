@@ -6,7 +6,6 @@ describe('UserController', () => {
     let sandbox;
     let req;
     let res;
-    let userController;
 
     beforeEach(() => {
         sandbox = createSandbox();
@@ -69,11 +68,9 @@ describe('UserController', () => {
 
     describe('update()', () => {
         let findStub;
-        let saveStub;
 
         beforeEach(() => {
             findStub = sandbox.stub(User, 'findById');
-            saveStub = sandbox.stub(User.prototype, 'save');
 
             req.userId = '123456789000';
 
@@ -120,9 +117,11 @@ describe('UserController', () => {
         });
     });
 
-    describe.skip('getAll()', () => {
+    describe('getAll()', () => {
+        let findStub;
+
         beforeEach(() => {
-            User.find = sandbox.stub();
+            findStub = sandbox.stub(User, 'find');
         });
 
         it('should return 200 and a list of users', async () => {
@@ -136,18 +135,18 @@ describe('UserController', () => {
                 password: 'acabecadopovo'
             }];
 
-            User.find.resolves(users);
+            findStub.resolves(users);
 
-            const { status, json } = await userController.getAll(req, res);
+            const { status, json } = await UserController.getAll(req, res);
 
             expect(status).to.equal(200);
             expect(json).to.deep.equal(users);
         });
 
         it('should return 500 if an error is thrown', async () => {
-            User.find.rejects({ message: 'A busca falhou' });
+            findStub.rejects({ message: 'A busca falhou' });
 
-            const { status, json } = await userController.getAll(req, res);
+            const { status, json } = await UserController.getAll(req, res);
 
             expect(status).to.equal(500);
             expect(json).to.deep.equal({ message: 'A busca falhou' });
@@ -163,7 +162,7 @@ describe('UserController', () => {
         it('should return 404 if user is not found', async () => {
             User.findById.resolves(null);
 
-            const { status, json } = await userController.getById(req, res);
+            const { status, json } = await UserController.getById(req, res);
 
             expect(status).to.equal(404);
             expect(json).to.deep.equal({ message: `Não há usuário com o id ${req.params.id}.` });
@@ -178,7 +177,7 @@ describe('UserController', () => {
 
             User.findById.resolves(user);
 
-            const { status, json } = await userController.getById(req, res);
+            const { status, json } = await UserController.getById(req, res);
 
             expect(status).to.equal(200);
             expect(json).to.deep.equal(user);
@@ -187,7 +186,7 @@ describe('UserController', () => {
         it('should return 500 if an error is thrown', async () => {
             User.findById.rejects({ message: 'Usuário não encontrado' });
 
-            const { status, json } = await userController.getById(req, res);
+            const { status, json } = await UserController.getById(req, res);
 
             expect(status).to.equal(500);
             expect(json).to.deep.equal({ message: 'Usuário não encontrado' });
@@ -203,7 +202,7 @@ describe('UserController', () => {
         it('should return 404 if user was not found', async () => {
             User.findByIdAndRemove.resolves(null);
 
-            const { status, json } = await userController.remove(req, res);
+            const { status, json } = await UserController.remove(req, res);
 
             expect(status).to.equal(404);
             expect(json).to.deep.equal({ message: 'Usuário não encontrado.' });
@@ -218,7 +217,7 @@ describe('UserController', () => {
 
             User.findByIdAndRemove.resolves(user);
 
-            const { status, json } = await userController.remove(req, res);
+            const { status, json } = await UserController.remove(req, res);
 
             expect(User.findByIdAndRemove.calledWith(req.userId)).to.be.true;
             expect(status).to.equal(200);
@@ -228,7 +227,7 @@ describe('UserController', () => {
         it('should return 500 if an error is thrown', async () => {
             User.findByIdAndRemove.rejects({ message: 'Não deu pra deletar =/' });
 
-            const { status, json } = await userController.remove(req, res);
+            const { status, json } = await UserController.remove(req, res);
 
             expect(status).to.equal(500);
             expect(json).to.deep.equal({ message: 'Não deu pra deletar =/' });
