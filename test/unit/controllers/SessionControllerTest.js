@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../../../src/models/User';
 import PasswordUtils from '../../../src/utils/PasswordUtils';
 import SessionController from '../../../src/controllers/SessionController';
+import { expect } from 'chai';
 
 describe('SessionController', () => {
     describe('auth', () => {
@@ -18,10 +19,9 @@ describe('SessionController', () => {
 
         beforeEach(() => {
             sandbox = createSandbox();
-            const mocks = TestUtils.mockReqRes(sandbox);
 
-            req = mocks.req;
-            res = mocks.res;
+            req = TestUtils.mockReq();
+            res = TestUtils.mockRes();
 
             req.body = {
                 email: 'meteoro@softeam.com.br',
@@ -52,20 +52,20 @@ describe('SessionController', () => {
             findStub.returns({ select: () => null });
             sandbox.stub(PasswordUtils, 'match').resolves(true);
 
-            await SessionController.auth(req, res);
+            const { status, json } = await SessionController.auth(req, res);
 
-            expect(res.status.calledWith(400)).to.be.true;
-            expect(res.json.calledWith({ message: 'Email ou senha incorretos.' })).to.be.true;
+            expect(status).to.equal(400);
+            expect(json).to.deep.equal({ message: 'Email ou senha incorretos.' });
         });
 
         it('should return 400 if passwords do not match', async () => {
             findStub.returns({ select: () => mockUser });
             sandbox.stub(PasswordUtils, 'match').resolves(false);
 
-            await SessionController.auth(req, res);
+            const { status, json } = await SessionController.auth(req, res);
 
-            expect(res.status.calledWith(400)).to.be.true;
-            expect(res.json.calledWith({ message: 'Email ou senha incorretos.' })).to.be.true;
+            expect(status).to.equal(400);
+            expect(json).to.deep.equal({ message: 'Email ou senha incorretos.' });
         });
 
         it('should return 200 with the user and token', async () => {
@@ -76,9 +76,9 @@ describe('SessionController', () => {
             const userWithoutPassword = mockUser;
             delete userWithoutPassword.password;
 
-            const json = await SessionController.auth(req, res);
+            const { status, json } = await SessionController.auth(req, res);
 
-            expect(res.status.calledWith(200)).to.be.true;
+            expect(status).to.equal(200);
             expect(json).to.deep.equal({ user: userWithoutPassword, token: 'tokenemdoido' });
         });
 
