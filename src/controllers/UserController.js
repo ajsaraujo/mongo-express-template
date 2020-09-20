@@ -1,15 +1,13 @@
-class UserController {
-    constructor(User) {
-        this.User = User;
-    }
+import { User } from '../models/User';
 
-    async create(req, res) {
+class UserController {
+    static async create(req, res) {
         try {
             if (req.emailInUse) {
                 return res.status(400).json({ message: `O email ${req.body.email} já está em uso.` });
             }
 
-            const user = await this.User.create(req.body);
+            const user = await User.create(req.body);
 
             user.password = undefined;
 
@@ -20,10 +18,10 @@ class UserController {
     }
 
     // findByIdAndUpdate não aciona 'save'. Atualizamos e chamamos save manualmente.
-    async update(req, res) {
+    static async update(req, res) {
         try {
             const { name, password, email } = req.body;
-            const user = await this.User.findById(req.userId).select('+password');
+            const user = await User.findById(req.userId).select('+password');
 
             if (!user) {
                 return res.status(404).json({ message: `Não foi encontrado usuário com o id ${req.userId}` });
@@ -43,18 +41,18 @@ class UserController {
         }
     }
 
-    async getAll(req, res) {
+    static async getAll(req, res) {
         try {
-            const users = await this.User.find();
+            const users = await User.find();
             return res.status(200).json(users);
         } catch ({ message }) {
             return res.status(500).json({ message });
         }
     }
 
-    async getById(req, res) {
+    static async getById(req, res) {
         try {
-            const user = await this.User.findById(req.params.id);
+            const user = await User.findById(req.params.id);
 
             if (!user) {
                 return res.status(404).json({ message: `Não há usuário com o id ${req.params.id}.` });
@@ -66,9 +64,9 @@ class UserController {
         }
     }
 
-    async remove(req, res) {
+    static async remove(req, res) {
         try {
-            const user = await this.User.findByIdAndRemove(req.userId);
+            const user = await User.findByIdAndRemove(req.userId);
 
             if (!user) {
                 return res.status(404).json({ message: 'Usuário não encontrado.' });
