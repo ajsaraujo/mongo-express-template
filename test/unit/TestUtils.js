@@ -1,19 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import rewire from 'rewire';
 
-function mockReqRes(sandbox) {
-    const req = { params: {}, headers: {} };
-
-    const res = {
-        status: sandbox.stub().callsFake(() => res),
-        json: sandbox.stub().callsFake(returnItself)
-    };
-
-    const next = sandbox.stub();
-
-    return { req, res, next };
-}
-
 function mockReq() {
     return { params: {}, headers: {} };
 }
@@ -54,4 +41,10 @@ function stubPrivateMethod(sandbox, modulePath, methodName) {
     return stub;
 }
 
-export default { mockReqRes, mockReq, mockRes, mockNext, getPrivateMethod, stubPrivateMethod };
+export default {
+    mockReq,
+    mockRes,
+    mockNext,
+    getPrivateMethod,
+    stubPrivateMethod
+};

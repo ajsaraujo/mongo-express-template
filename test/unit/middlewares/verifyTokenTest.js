@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import jwt from 'jsonwebtoken';
 import verifyToken from '../../../src/middlewares/verifyToken';
 
@@ -37,29 +38,28 @@ describe('verifyToken', () => {
         let next;
 
         beforeEach(() => {
-            const mocks = TestUtils.mockReqRes(sandbox);
-            req = mocks.req;
-            res = mocks.res;
-            next = mocks.next;
+            req = TestUtils.mockReq();
+            res = TestUtils.mockRes();
+            next = TestUtils.mockNext(sandbox);
         });
 
-        it('should return 401 if no token is provided', () => {
-            verifyToken(req, res, next);
+        it('should return 401 if no token is provided', async () => {
+            const { status, json } = await verifyToken(req, res, next);
 
-            expect(res.status.calledWith(401)).to.be.true;
-            expect(res.json.calledWith({ message: 'Autenticação necessária.' }));
+            expect(status).to.equal(401);
+            expect(json).to.deep.equal({ message: 'Autenticação necessária.' });
         });
 
-        it('should return 401 if token is malformed', () => {
+        it('should return 401 if token is malformed', async () => {
             req.headers.authorization = 'Beaer 123456789a32';
 
-            verifyToken(req, res, next);
+            const { status, json } = await verifyToken(req, res, next);
 
-            expect(res.status.calledWith(401)).to.be.true;
-            expect(res.json.calledWith({ message: 'Token inválido.' })).to.be.true;
+            expect(status).to.equal(401);
+            expect(json).to.deep.equal({ message: 'Token inválido.' });
         });
 
-        it('should return next and inject user id into the request', () => {
+        it('should return next and inject user id into the request', async () => {
             req.headers.authorization = 'Bearer 1234577920fsdaf';
 
             sandbox.stub(jwt, 'verify').returns({ id: 'bj435çsfkj' });
@@ -70,15 +70,15 @@ describe('verifyToken', () => {
             expect(next.calledOnce).to.be.true;
         });
 
-        it('should return 401 if an error is thrown', () => {
+        it('should return 401 if an error is thrown', async () => {
             req.headers.authorization = 'Bearer 143ijtdgr395';
 
             sandbox.stub(jwt, 'verify').throws(new Error('Token inválido'));
 
-            verifyToken(req, res, next);
+            const { json, status } = await verifyToken(req, res, next);
 
-            expect(res.status.calledWith(401)).to.be.true;
-            expect(res.json.calledWith({ message: 'Token inválido.' })).to.be.true;
+            expect(status).to.equal(401);
+            expect(json).to.deep.equal({ message: 'Token inválido.' });
         });
     });
 

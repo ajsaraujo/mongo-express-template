@@ -1,5 +1,5 @@
-import validate from '../../../src/middlewares/validate';
 import { expect } from 'chai';
+import validate from '../../../src/middlewares/validate';
 
 describe('validate', () => {
     let sandbox;
@@ -11,11 +11,9 @@ describe('validate', () => {
     beforeEach(() => {
         sandbox = createSandbox();
 
-        const mocks = TestUtils.mockReqRes(sandbox);
-
-        req = mocks.req;
-        res = mocks.res;
-        next = mocks.next;
+        req = TestUtils.mockReq();
+        res = TestUtils.mockRes();
+        next = TestUtils.mockNext(sandbox);
 
         req.body = {
             name: 'Ranger Vermelho',
@@ -43,10 +41,10 @@ describe('validate', () => {
     it('should return 400 if validation fails', async () => {
         schema.validateAsync.rejects({ message: 'Dados horríveis' });
 
-        await validate(schema)(req, res, next);
+        const { status, json } = await validate(schema)(req, res, next);
 
-        expect(res.status.calledWith(400)).to.be.true;
-        expect(res.json.calledWith({ message: 'Dados horríveis' })).to.be.true;
+        expect(status).to.equal(400);
+        expect(json).to.deep.equal({ message: 'Dados horríveis' });
     });
 
     afterEach(() => {

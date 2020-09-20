@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import emailInUse from '../../../src/middlewares/emailInUse';
 import { User } from '../../../src/models/User';
 
@@ -10,11 +11,10 @@ describe('emailInUse', () => {
 
     beforeEach(() => {
         sandbox = createSandbox();
-        const mocks = TestUtils.mockReqRes(sandbox);
 
-        req = mocks.req;
-        res = mocks.res;
-        next = mocks.next;
+        req = TestUtils.mockReq();
+        res = TestUtils.mockRes();
+        next = TestUtils.mockNext(sandbox);
 
         req.body = { email: 'silviosantos@softeam.com.br' };
 
@@ -54,10 +54,10 @@ describe('emailInUse', () => {
     it('should return 500 if an error is thrown', async () => {
         findStub.rejects({ message: 'Deu certo não' });
 
-        await emailInUse(req, res, next);
+        const { json, status } = await emailInUse(req, res, next);
 
-        expect(res.status.calledWith(500)).to.be.true;
-        expect(res.json.calledWith({ message: 'Deu certo não' })).to.be.true;
+        expect(status).to.equal(500);
+        expect(json).to.deep.equal({ message: 'Deu certo não' });
     });
 
     afterEach(() => {
