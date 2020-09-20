@@ -14,6 +14,30 @@ function mockReqRes(sandbox) {
     return { req, res, next };
 }
 
+function mockReq() {
+    return { params: {}, headers: {} };
+}
+
+function mockRes() {
+    const Response = class Response {
+        status(statusCode) {
+            this.status = statusCode;
+            return this;
+        }
+
+        json(data) {
+            this.json = data;
+            return this;
+        }
+    };
+
+    return new Response();
+}
+
+function mockNext(sandbox) {
+    return sandbox.stub();
+}
+
 function getPrivateMethod(modulePath, methodName) {
     const module = rewire(modulePath);
 
@@ -30,4 +54,4 @@ function stubPrivateMethod(sandbox, modulePath, methodName) {
     return stub;
 }
 
-export default { mockReqRes, getPrivateMethod, stubPrivateMethod };
+export default { mockReqRes, mockReq, mockRes, mockNext, getPrivateMethod, stubPrivateMethod };

@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { User } from '../../../src/models/User';
 import PasswordUtils from '../../../src/utils/PasswordUtils';
 import SessionController from '../../../src/controllers/SessionController';
@@ -70,7 +71,7 @@ describe('SessionController', () => {
         it('should return 200 with the user and token', async () => {
             findStub.returns({ select: () => mockUser });
             sandbox.stub(PasswordUtils, 'match').resolves(true);
-            sandbox.stub(SessionController, 'generateToken').resolves('tokenemdoido');
+            sandbox.stub(jwt, 'sign').resolves('tokenemdoido');
 
             const userWithoutPassword = mockUser;
             delete userWithoutPassword.password;
