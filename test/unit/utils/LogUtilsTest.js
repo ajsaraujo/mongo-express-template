@@ -25,7 +25,7 @@ describe('LogUtils', () => {
 
         await LogUtils.log('Algo deu errado!');
 
-        expect(consoleLog.calledWith('Algo deu errado!')).to.be.true;
+        expect(consoleLog.calledWith(' > Algo deu errado!')).to.be.true;
     });
 
     afterEach(() => {

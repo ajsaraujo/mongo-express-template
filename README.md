@@ -12,7 +12,7 @@ Este é o template da SofTeam para aplicações Express com MongoDB, servindo co
 ## Pré-requisitos
 
 - [Git](https://git-scm.com/)
-- MongoDB Service - [Linux](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/) - [Mac](https://www.ge.com/digital/documentation/meridium/Help/V43050/Default/Subsystems/ModuleDeployment/Content/ConfigureAWindowsServiceForMongoDB.htm) - [Windows](https://www.ge.com/digital/documentation/meridium/Help/V43050/Default/Subsystems/ModuleDeployment/Content/ConfigureAWindowsServiceForMongoDB.htm)
+- MongoDB Service: [Linux](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/) - [Mac](https://www.ge.com/digital/documentation/meridium/Help/V43050/Default/Subsystems/ModuleDeployment/Content/ConfigureAWindowsServiceForMongoDB.htm) - [Windows](https://www.ge.com/digital/documentation/meridium/Help/V43050/Default/Subsystems/ModuleDeployment/Content/ConfigureAWindowsServiceForMongoDB.htm)
 - [Node.js](https://nodejs.org/en/)
 
 ## Configuração
@@ -89,53 +89,48 @@ export { Product, productRules };
 Definimos o _model_ `Product` e também usamos o Joi para criar um objeto de validação chamado `productRules`. Logo veremos como ele será utilizado. Agora, vamos criar  o `ProductController` em `controllers/`.
 
 ```js
-class ProductController() {
-    constructor(Product) {
-        this.Product = Product;
-    }
+import { Product } from '../models/Product';
 
-    async getAll(req, res) {
-	    try {
-	        const products = await this.Product.find();
-	        return res.status(200).json(products);
-	    } catch ({ message }) {
-	        return res.status(500).json({ message });
-	    }
-    }
-
-	async create(req, res) {
-		try {
-			const newProduct = await this.Product.create(req.body);
-			return res.status(201).json(newProduct);
-		} catch ({ message }) {
-		    return res.status(500).json({ message });
-		}
+async function getAll(req, res) {
+	try {
+	    const products = await Product.find();
+	    return res.status(200).json(products);
+	} catch ({ message }) {
+	    return res.status(500).json({ message });
 	}
 }
 
-export default ProductController;
+async function create(req, res) {
+	try {
+		const newProduct = await Product.create(req.body);
+		return res.status(201).json(newProduct);
+	} catch ({ message }) {
+		return res.status(500).json({ message });
+	}
+}
+
+export default { getAll, create };
 ```
 
-Injetamos o `Product` pelo construtor para facilitar nossa vida na hora de escrever os testes unitários. Poderemos passar um `Product` fake , com métodos que se comportarão da forma que for mais conveniente para o ambiente de testes. Observe que no `create` assumimos que os dados enviados pelo cliente em `req.body`  estão corretos, pois a validação já terá sido feita por um middleware, como veremos a seguir. 
+Definimos as funções `getAll` e `create` e exportamos elas num objeto. Observe que em `create` assumimos que os dados enviados pelo cliente via `req.body`  estão corretos, pois a validação já terá sido feita por um middleware, como veremos a seguir. 
 
-O último passo é expor um endpoint para os métodos que criamos. Em `routes/`, crie um arquivo `productRoute.js`:
+O último passo é expor um endpoint para os métodos que criamos. Em `routes/`, crie o arquivo `productRoute.js`:
 
 ```js
 import { Router } from 'express';
 import ProductController from '../controllers/ProductController';
-import { Product, productRules } from '../models/Product';
+import { productRules } from '../models/Product';
 import validate from '../midddlewares/validate';
 
 const router = Router();
-const productController = new ProductController(Product);
 
 router.get('/', productController.getAll);
-router.post('/', validate(productRules), productController.create);
+router.post('/', validate(productRules), ProductController.create);
 
 export default { name: 'product', router };
 ```
 
-Criamos um _router_ que irá servir o endpoint `/product`. Instanciamos um novo `ProductController` injetando nele o model `Product` definido em `models/`. Então, associamos cada verbo HTTP a um método do controller, utilizando o middleware de validação quando necessário. Por fim, exportamos um objeto com o nome do endpoint que será exposto, e o router. Pronto! Não é preciso fazer mais nada, o `createRouter`  já se responsabilizará por incluir esses endpoints em `api/product`. 
+Criamos um _router_ que irá servir o endpoint `/product`. Então, associamos cada verbo HTTP a um método do controller, utilizando o middleware de validação quando necessário. Por fim, exportamos um objeto com o nome do endpoint que será exposto e o router. Pronto! Não é preciso fazer mais nada, o `createRouter`  já se responsabilizará por incluir esses endpoints em `api/product`. 
 
 ## Dependências
 
