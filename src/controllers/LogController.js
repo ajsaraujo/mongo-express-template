@@ -1,15 +1,13 @@
+import Log from '../models/Log';
+
 class LogController {
-    constructor(Log) {
-        this.Log = Log;
+    static async create(content) {
+        await Log.create({ content });
     }
 
-    async create(content) {
-        await this.Log.create({ content });
-    }
-
-    async get(req, res) {
+    static async get(req, res) {
         try {
-            const logs = await this.Log.find();
+            const logs = await Log.find();
             return res.status(200).json(logs);
         } catch ({ message }) {
             return res.status(500).json({ message });

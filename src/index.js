@@ -29,7 +29,7 @@ function addExitSignals(app, server, exitSignals) {
         await app.database.connect();
 
         const server = app.listen(process.env.APP_PORT, () => {
-            LogUtils.log(`O app está escutando na porta ${process.env.APP_PORT}!`);
+            LogUtils.log(`App escutando na porta ${process.env.APP_PORT}.`);
         });
 
         addExitSignals(app, server, ['SIGINT', 'SIGTERM', 'SIGQUIT']);

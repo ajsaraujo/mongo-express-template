@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import LogUtils from '../../../src/utils/LogUtils';
 import LogController from '../../../src/controllers/LogController';
 
@@ -12,7 +11,7 @@ describe('LogUtils', () => {
     it('should log to the database if node env is production', async () => {
         process.env.NODE_ENV = 'production';
 
-        const createLogStub = sandbox.stub(LogController.prototype, 'create');
+        const createLogStub = sandbox.stub(LogController, 'create');
 
         await LogUtils.log('Salvando no bd');
 
