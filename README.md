@@ -1,6 +1,6 @@
 # Template Express MongoDB
 
-Este é o template da SofTeam para aplicações Express com MongoDB, servindo como diretriz para os projetos da empresa. Para ver o template com banco de dados relacional, clique [aqui](https://github.com/SofTeamEJC/rdb-express-template).
+Este é o template da SofTeam para aplicações Express com MongoDB, servindo como diretriz para os projetos da empresa. Para ver o template com banco de dados relacional, clique [aqui](https://github.com/softeam-org/rdb-express-template).
 
   1. [Pré-Requisitos](#pré-requisitos)
   2. [Configuração](#configuração)
