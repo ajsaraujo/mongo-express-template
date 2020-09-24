@@ -20,7 +20,7 @@ Este é o template da SofTeam para aplicações Express com MongoDB, servindo co
 1. Clone o repositório e instale as dependências.
 ```sh
 # Clonando o repositório
-git clone https://github.com/SofTeamEJC/express-template.git
+git clone https://github.com/softeam-org/express-template.git
 
 # Navegando para a pasta raiz
 cd express-template
