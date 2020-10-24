@@ -2,15 +2,12 @@ import morgan from 'morgan';
 import { PassThrough } from 'stream';
 import { carry } from 'carrier';
 import LogController from '../controllers/LogController';
-import Log from '../models/Log';
 
 function createStream() {
     const stream = new PassThrough();
 
-    const logController = new LogController(Log);
-
     const lineStream = carry(stream);
-    lineStream.on('line', line => logController.create(line));
+    lineStream.on('line', line => LogController.create(line));
 
     return stream;
 }

@@ -16,7 +16,7 @@ async function create(req, res) {
     }
 }
 
-    // findByIdAndUpdate não aciona 'save'. Atualizamos e chamamos save manualmente.
+// findByIdAndUpdate não aciona 'save'. Atualizamos e chamamos save manualmente.
 async function update(req, res) {
     try {
         const { name, password, email } = req.body;
@@ -82,5 +82,5 @@ export default {
     update,
     remove,
     getAll,
-    getById 
+    getById
 };

@@ -5,9 +5,13 @@
   "main": "src/index.js",
   "scripts": {
     "build": "babel src --out-dir build",
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index.js",
     "dev": "babel-node src/index.js",
-    "test": "cross-env NODE_ENV=test mocha test/unit/**/*Test.js --require @babel/register --require test/unit/setup.js --reporter spec --slow 5000"
+    "test": "cross-env NODE_ENV=test mocha test/unit/**/*Test.js --require @babel/register --require test/unit/setup.js --reporter spec --slow 5000",
+    "lint": "eslint src --fix --ext js"
+  },
+  "engines": {
+    "node": "12.x"
   },
   "husky": {
     "hooks": {
@@ -15,7 +19,9 @@
     }
   },
   "lint-staged": {
-    "*.js": ["npx eslint --fix"]
+    "*.js": [
+      "npx eslint --fix"
+    ]
   },
   "repository": {
     "type": "git",
