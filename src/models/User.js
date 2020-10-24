@@ -25,7 +25,7 @@ const UserSchema = new Schema(
         },
     },
 
-    { timeStamps: true },
+    { timeStamps: true, discriminatorKey: 'role' },
 );
 
 // Deve-se usar function() e não arrow function por causa do this.
