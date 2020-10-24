@@ -6,20 +6,17 @@ name: CI
 on: [pull_request]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: CI Jobs
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run lint
-    - run: npm run build  
-    - run: npm test
+        node-version: 12.x
+    - run: |
+        npm ci
+        npm run lint
+        npm run build
+        npm run test
