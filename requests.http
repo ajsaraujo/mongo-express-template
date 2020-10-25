@@ -7,8 +7,10 @@ content-type: application/json
 
 {
     "name": "Sófocles Teamildo",
-    "email": "softeam@gmail.com",
-    "password": "thecakeisalie"
+    "email": "softeam2@gmail.com",
+    "password": "thecakeisalie",
+    "role": "Vendor",
+    "cnpj": "12.456.789/0001-90"
 }
 
 ### Obter todos os usuários

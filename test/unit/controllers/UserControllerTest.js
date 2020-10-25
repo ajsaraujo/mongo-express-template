@@ -38,7 +38,7 @@ describe('UserController', () => {
             expect(json).to.deep.equal({ message: 'O email softeam@softeam.com.br já está em uso.' });
         });
 
-        it('should return 200 and create user', async () => {
+        it('should return 201 and create user', async () => {
             createStub.resolves(req.body);
 
             const { status, json } = await UserController.create(req, res);
@@ -167,7 +167,8 @@ describe('UserController', () => {
             const { status, json } = await UserController.getById(req, res);
 
             expect(status).to.equal(404);
-            expect(json).to.deep.equal({ message: `Não há usuário com o id ${req.params.id}.` });  });
+            expect(json).to.deep.equal({ message: `Não há usuário com o id ${req.params.id}.` });
+        });
 
         it('should return 200 and user', async () => {
             const user = {
