@@ -18,7 +18,8 @@ module.exports = {
         'arrow-parens': 'off',
         'comma-dangle': 'off',
         'linebreak-style': 'off',
-        'function-paren-newline': 'off'
+        'function-paren-newline': 'off',
+        'no-undef': ['error']
     },
     overrides: [
         {

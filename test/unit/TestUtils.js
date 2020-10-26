@@ -2,7 +2,7 @@
 import rewire from 'rewire';
 
 function mockReq() {
-    return { params: {}, headers: {} };
+    return { body: {}, params: {}, headers: {} };
 }
 
 function mockRes() {

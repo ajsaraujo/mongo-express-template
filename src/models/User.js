@@ -25,16 +25,13 @@ const UserSchema = new Schema(
         },
     },
 
-    { timeStamps: true },
+    { timeStamps: true, discriminatorKey: 'role' },
 );
 
 // Deve-se usar function() e não arrow function por causa do this.
 // eslint-disable-next-line func-names
 UserSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        this.password = await PasswordUtils.encrypt(this.password);
-    }
-
+    this.password = await PasswordUtils.encrypt(this.password);
     next();
 });
 
@@ -44,7 +41,7 @@ const emailRules = Joi.string().email().required();
 const passwordRules = Joi.string().min(8).max(40).required();
 
 const userRules = Joi.object({
-    name: Joi.string().pattern(new RegExp('^[A-Za-zÁÉÍÓÚáéíóúãõÃÕâêôÂÊÔ ]+$')).required(),
+    name: Joi.string().pattern(new RegExp(/^[A-Za-zÁÉÍÓÚáéíóúãõÃÕâêôÂÊÔ ]+$/)).required(),
     email: emailRules,
     password: passwordRules,
 });
