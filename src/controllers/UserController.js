@@ -23,7 +23,7 @@ async function update(req, res) {
         const user = await User.findByIdAndUpdate(userId, body, { new: true }).select('+password');
 
         if (!user) {
-            return res.status(404).json({ message: `Não foi encontraod usuário com o id ${userId}` });
+            return res.status(404).json({ message: `Não foi encontrado usuário com o id ${userId}` });
         }
 
         // Precisamos chamar save pra acionar o middleware de criptografia.

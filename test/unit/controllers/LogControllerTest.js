@@ -39,7 +39,7 @@ describe('LogController', () => {
 
             const { status, json } = await LogController.get(req, res);
 
-            expect(Log.find.getCall(0).args.length).to.equal(0);
+            expect(Log.find.getCall(0).args[0]).to.eql({});
             expect(status).to.equal(200);
             expect(json).to.deep.equal(logs);
         });
