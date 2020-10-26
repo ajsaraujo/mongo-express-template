@@ -16,20 +16,17 @@ async function create(req, res) {
     }
 }
 
-// findByIdAndUpdate não aciona 'save'. Atualizamos e chamamos save manualmente.
 async function update(req, res) {
     try {
-        const { name, password, email } = req.body;
-        const user = await User.findById(req.userId).select('+password');
+        const { userId, body } = req;
+
+        const user = await User.findByIdAndUpdate(userId, body, { new: true }).select('+password');
 
         if (!user) {
-            return res.status(404).json({ message: `Não foi encontrado usuário com o id ${req.userId}` });
+            return res.status(404).json({ message: `Não foi encontraod usuário com o id ${userId}` });
         }
 
-        user.name = name;
-        user.email = email;
-        user.password = password;
-
+        // Precisamos chamar save pra acionar o middleware de criptografia.
         await user.save();
 
         user.password = undefined;
