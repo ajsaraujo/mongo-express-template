@@ -44,7 +44,7 @@ const emailRules = Joi.string().email().required();
 const passwordRules = Joi.string().min(8).max(40).required();
 
 const userRules = Joi.object({
-    name: Joi.string().pattern(new RegExp('^[A-Za-zÁÉÍÓÚáéíóúãõÃÕâêôÂÊÔ ]+$')).required(),
+    name: Joi.string().pattern(new RegExp(/^[A-Za-zÁÉÍÓÚáéíóúãõÃÕâêôÂÊÔ ]+$/)).required(),
     email: emailRules,
     password: passwordRules,
 });

@@ -3,18 +3,18 @@ import Joi from 'joi';
 import { User, userRules } from './User';
 import { Address, addressRules } from './Address';
 
-const ConsumerSchema = new Schema({
+const CustomerSchema = new Schema({
     address: {
         type: Address,
         required: true
     },
 });
 
-const Consumer = User.discriminator('Consumer', ConsumerSchema);
+const Customer = User.discriminator('Customer', CustomerSchema);
 
-const consumerRules = userRules.concat(Joi.object({
-    role: Joi.string().valid('Consumer'),
+const customerRules = userRules.concat(Joi.object({
+    role: Joi.string().valid('Customer', 'customer'),
     address: addressRules.required()
 }));
 
-export { Consumer, consumerRules };
+export { Customer, customerRules };

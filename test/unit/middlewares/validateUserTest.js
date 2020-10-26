@@ -25,11 +25,11 @@ describe('validateUser', () => {
     it('should return 400 if the provided role is not valid', async () => {
         req.body.role = 'User';
 
-        const validRoles = { vendor: {}, consumer: {} };
+        const validRoles = { vendor: {}, customer: {} };
         const { status, json } = await validateUser(validRoles)(req, res, next);
 
         expect(status).to.equal(400);
-        expect(json).to.eql({ message: 'Role attribute must be one of vendor,consumer' });
+        expect(json).to.eql({ message: 'Role attribute must be one of vendor,customer' });
     });
 
     it('should validate with the approppriate role', async () => {

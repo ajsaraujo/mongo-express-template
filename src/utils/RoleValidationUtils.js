@@ -1,7 +1,7 @@
 import { vendorRules } from '../models/Vendor';
-import { consumerRules } from '../models/Consumer';
+import { customerRules } from '../models/Customer';
 
 export default {
     vendor: vendorRules,
-    consumer: consumerRules
+    customer: customerRules
 };
